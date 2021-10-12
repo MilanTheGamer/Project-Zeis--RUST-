@@ -1,22 +1,8 @@
+mod server;
+
+use server::Server;
+
 fn main() {
-    let server = Server::new("ZEUS".to_string());
-    server.run();
+    let srv = Server::new("127.0.0.1:8080".to_string());
+    srv.run();
 }
-
-struct Server {
-    server_name:String
-}
-
-impl Server {
-    fn new(server_name:String) -> Self {
-        Self{
-            server_name
-        }
-    }
-
-    fn run(self) {
-        println!("{} is running",self.server_name)
-    }
-}
-
-
