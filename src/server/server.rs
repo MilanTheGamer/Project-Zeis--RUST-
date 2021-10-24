@@ -45,14 +45,6 @@ impl Server {
                 }
 
             }
-            // let req = listener.accept();
-
-            // if req.is_err(){
-            //     continue;
-            // }
-
-            // let (socket,addr) = req.unwrap();
-
         }
     }
 }
