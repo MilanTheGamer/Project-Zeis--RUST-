@@ -23,12 +23,10 @@ impl Server {
                 Ok((mut stream,_)) => {
                     let mut buffer = [0;1024];
                     match stream.read(&mut buffer) {
-                        Ok(_) => {
-                          println!("{}",String::from_utf8_lossy(&buffer)); 
+                        Ok(_) => { 
                           match Request::try_from(&buffer[..]) {
                               Ok(request) => {
-                                unimplemented!();
-                                // dbg!(request);
+                                dbg!(request);
                               },
                               Err(e) => {
                                 println!("{}",e)
