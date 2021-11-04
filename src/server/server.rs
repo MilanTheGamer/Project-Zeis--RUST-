@@ -1,7 +1,7 @@
-use std::io::Read;
+use std::io::{Read, Write};
 use std::net::TcpListener;
 use std::convert::TryFrom;
-use crate::http::Request;
+use crate::http::{Request, Response, StatusCode};
 
 pub struct Server {
     address:String
@@ -23,15 +23,26 @@ impl Server {
                 Ok((mut stream,_)) => {
                     let mut buffer = [0;1024];
                     match stream.read(&mut buffer) {
-                        Ok(_) => { 
-                          match Request::try_from(&buffer[..]) {
-                              Ok(request) => {
-                                dbg!(request);
-                              },
-                              Err(e) => {
-                                println!("{}",e)
-                              }
-                          } 
+                        Ok(_) => {
+                            let response = match Request::try_from(&buffer[..]) {
+                                Ok(request) => {
+                                    dbg!(request);
+                                    Response::new(
+                                        StatusCode::Ok,
+                                        Some("<h1>HELLO</h1>".to_string())
+                                    )
+                                },
+                                Err(e) => {
+                                    Response::new(
+                                        StatusCode::NotFound,
+                                        None
+                                    )
+                                }
+                            };
+                            if let Err(e) = response.send(&mut stream) {
+                                println!("Faild to send response : {} ", e);
+                            }
+                          
                         },
                         Err(e) => {
                             println!("Faild to read from connection : {}",e)
